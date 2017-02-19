@@ -8,8 +8,8 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"math"
-	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -57,39 +57,24 @@ func getTemp() int {
 	cmdOutput := &bytes.Buffer{}
 	cmd.Stdout = cmdOutput
 	if err := cmd.Run(); err != nil {
-		printError(err)
+		log.Fatal(err)
 	}
 	tStr := string(cmdOutput.Bytes())
 	tStr = cleanString(tStr)
 	temp, err := strconv.ParseFloat(tStr, 64)
 	if err != nil {
-		printError(err)
+		log.Fatal(err)
 	}
 	return round(temp)
 }
 
 func cleanString(s string) string {
-	s = stripString(s, "temp=")
-	s = stripString(s, "'C")
-	s = stripString(s, "\n")
-	return s
-}
-
-func stripString(s string, r string) string {
-	s = strings.Replace(s, r, "", -1)
+	s = strings.Replace(s, "temp=", "", -1)
+	s = strings.Replace(s, "'C", "", -1)
+	s = strings.Replace(s, "\n", "", -1)
 	return s
 }
 
 func round(num float64) int {
 	return int(num + math.Copysign(0.5, num))
-}
-
-func millis() int64 {
-	return time.Now().Round(time.Millisecond).UnixNano() / (int64(time.Millisecond) / int64(time.Nanosecond))
-}
-
-func printError(err error) {
-	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("==> Error: %s\n", err.Error()))
-	}
 }
