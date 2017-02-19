@@ -16,12 +16,6 @@ import (
 	"time"
 )
 
-type timer_t struct {
-	oldTime    int64
-	newTime    int64
-	intervalMS int64
-}
-
 type state_t struct {
 	tempC    int
 	fanOn    bool
@@ -30,19 +24,15 @@ type state_t struct {
 }
 
 func main() {
-	var timer timer_t
 	var state state_t
 	state.limitOn = 65
 	state.limitOff = 63
-	initTimer(&timer)
 
 	for {
-		time.Sleep(time.Millisecond * 100)
-		if checkTimer(&timer) {
-			state.tempC = getTemp()
-			setFan(&state)
-			fmt.Printf("temp: %d'C\n", state.tempC)
-		}
+		time.Sleep(time.Millisecond * 2000)
+		state.tempC = getTemp()
+		setFan(&state)
+		fmt.Printf("temp: %d'C\n", state.tempC)
 	}
 }
 
@@ -76,21 +66,6 @@ func getTemp() int {
 		printError(err)
 	}
 	return round(temp)
-}
-
-func checkTimer(t *timer_t) bool {
-	t.newTime = millis()
-	if t.newTime > t.oldTime+t.intervalMS {
-		t.oldTime = t.newTime
-		return true
-	}
-	return false
-}
-
-func initTimer(t *timer_t) {
-	t.intervalMS = 2000
-	t.oldTime = millis()
-	t.newTime = t.oldTime
 }
 
 func cleanString(s string) string {
