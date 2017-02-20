@@ -1,4 +1,4 @@
-## Pi Fan Control
+# Pi Fan Control
 
 CC-BY Roy Dybing, February 2017
 
@@ -12,17 +12,17 @@ To prevent the CPU fan from going at full tilt, I've added a little resistor to 
 
 Included in the repo is a rPi3B+ native binary. Since it controls hardware, it must be run as sudo or else it'll do absolutely nothing. That only took me an hour of headscratching to figure out :P
 
-# Pin assignment:
+## Pin assignment:
 
 - Power, +5V
 - Ground, any GND
 - Control, GPIO-18
 
-# Temperature Limits:
+## Temperature Limits:
 
 - Turns on at > 65'C
 - Turns off at < 63'C
 
-# More Information:
+## More Information:
 
-See https://dybings.blogspot.no for build, schematics and code walkthrough.
+See https://dybings.blogspot.no for wiring and code walkthrough.
