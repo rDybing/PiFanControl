@@ -10,4 +10,19 @@ This is a simple on/off control. Chiefly due to me not having a digital potentio
 
 To prevent the CPU fan from going at full tilt, I've added a little resistor to the mix.
 
-See https://dybings.blogspot.no for build and code walkthrough.
+Included in the repo is a rPi3B+ native binary. Since it controls hardware, it must be run as sudo or else it'll do absolutely nothing. That only took me an hour of headscratching to figure out :P
+
+# Pin assignment:
+
+- Power, +5V
+- Ground, any GND
+- Control, GPIO-18
+
+# Temperature Limits:
+
+- Turns on at > 65'C
+- Turns off at < 63'C
+
+# More Information:
+
+See https://dybings.blogspot.no for build, schematics and code walkthrough.

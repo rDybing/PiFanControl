@@ -7,13 +7,15 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"math"
 	"os/exec"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/kidoman/embd"
+	_ "github.com/kidoman/embd/host/rpi"
 )
 
 type state_t struct {
@@ -23,16 +25,23 @@ type state_t struct {
 	limitOff int
 }
 
+var fanPin int
+
 func main() {
 	var state state_t
 	state.limitOn = 65
 	state.limitOff = 63
 
+	fanPin = 18
+
+	embd.InitGPIO()
+	defer embd.CloseGPIO()
+	embd.SetDirection(fanPin, embd.Out)
+
 	for {
 		time.Sleep(time.Millisecond * 2000)
 		state.tempC = getTemp()
 		setFan(&state)
-		fmt.Printf("temp: %d'C\n", state.tempC)
 	}
 }
 
@@ -41,13 +50,13 @@ func setFan(s *state_t) {
 		if s.tempC < s.limitOff {
 			// turn off fan
 			s.fanOn = false
-			fmt.Println("fan off")
+			embd.DigitalWrite(fanPin, embd.Low)
 		}
 	} else {
 		if s.tempC > s.limitOn {
 			// turn on fan
 			s.fanOn = true
-			fmt.Println("fan on")
+			embd.DigitalWrite(fanPin, embd.High)
 		}
 	}
 }
